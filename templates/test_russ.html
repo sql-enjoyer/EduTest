@@ -10,7 +10,7 @@
       background-color: #F0F0F0;
       margin: 0;
       padding: 0;
-      overflow-x: hidden; /* Отключение горизонтальной прокрутки */
+      overflow-x: hidden;
     }
     .header {
       background-color: #004D40;
@@ -78,27 +78,26 @@
     }
     .problem {
       margin-bottom: 20px;
-      text-align: center; /* Центрирование текста задачи */
     }
     .problem p {
       margin-bottom: 10px;
     }
     input[type="text"] {
       width: 100%;
-      max-width: 300px; /* Максимальная ширина поля ввода */
+      max-width: 300px;
       padding: 10px;
       border: 1px solid #BDBDBD;
       border-radius: 4px;
       font-size: 16px;
-      margin: 0 auto; /* Центрирование поля ввода */
-      display: block; /* Блочный элемент для центрирования */
+      margin: 0 auto;
+      display: block;
     }
     .button-container {
       display: flex;
       flex-direction: column;
-      align-items: center; /* Центрирование кнопок */
-      gap: 10px; /* Расстояние между кнопками */
-      margin-top: 20px; /* Отступ сверху */
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
     }
     button {
       background-color: #00796B;
@@ -109,7 +108,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      width: 100%; /* Ширина кнопки 100% */
+      width: 100%;
     }
     button:hover {
       background-color: #00897B;
@@ -121,14 +120,13 @@
       margin-top: 20px;
     }
 
-    /* Адаптивные стили */
     @media (min-width: 600px) {
       .button-container {
-        flex-direction: row; /* Выровнять кнопки в ряд на больших экранах */
-        justify-content: center; /* Центрирование кнопок */
+        flex-direction: row;
+        justify-content: center;
       }
       button {
-        width: auto; /* Автоматическая ширина кнопок на больших экранах */
+        width: auto;
       }
     }
   </style>
@@ -137,7 +135,7 @@
   <header class="header">
     <h1 onclick="window.location.href='/'">EduTest</h1>
     <nav class="nav-links">
-      <a href="#" class="active">Математика</a>
+      <a href="#" class="active">Русский язык</a>
       <a href="#">Физика</a>
       <a href="#">Информатика</a>
     </nav>
@@ -145,22 +143,23 @@
 
   {% if task %}
   <div class="container">
-    <h2>Тренажер по Математике</h2>
+    <h2>Тренажер по Рус. языку</h2>
     <h3>Задача №{{ task.get_id() }}</h3>
     <div class="problem">
-      <p>{{ task.get_text() }}</p>
-      <form method="POST" action="{{ url_for('test_math') }}">
+      <p>{{ task.get_text() | safe }}</p>
+      <form method="POST" action="{{ url_for('test_russ') }}">
         <input type="text" name="answer" placeholder="Введите ваш ответ" required>
         <div class="button-container">
           <button type="submit">Проверить</button>
-          <button type="button" onclick="window.open('https://ege.sdamgia.ru/', '_blank')">Теория и Источник</button>
-          <!-- Кнопка для следующей задачи -->
+          <button type="button" onclick="window.open('https://neofamily.ru/russkiy-yazyk/task-bank/{{ task.get_id() }}', '_blank')">Теория и Источник</button>
           <button type="button" onclick="window.location.href='{{ url_for('next_task') }}'">Следующий вопрос</button>
         </div>
       </form>
       {% if message %}
       <div class="message" style="color: {{ color }};">
+        <pre> 
           {{ message }}
+        </pre>
       </div>
       {% endif %}
     </div>
