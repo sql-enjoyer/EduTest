@@ -15,14 +15,40 @@ headers = {
     'Referer': 'https://neofamily.ru/'
 }
 
+wrong_messages   = [ "Ответ неверный, но ты на правильном пути!",
+                    "Это не тот ответ, но твоя попытка важна. Не сдавайся!",
+                    "Ошибка? Ничего страшного! Каждая из них — шаг к успеху.",
+                    "Ответ неверный, но я уверен в тебе! Пробуй дальше.",
+                    "Результат не точный. Но не переживай, ошибки помогают учиться.",
+                    "Неправильно, но виден твой старательный подход. Продолжай!",
+                    "Ответ неточный, но твое желание расти впечатляет.",
+                    "Ответ ошибочный, но я знаю: ты справишься при новой попытке!",
+                    "Кто не ошибается, тот не развивается!"
+                ]
+
+correct_messages = [ "Ответ верный! Молодец, ты отлично справился с этим заданием!",
+                    "Правильно! Вижу, что ты внимательно изучаешь материал.",
+                    "Точно! Так держать, продолжай в том же духе.",
+                    "Верный ответ! Твоя работа над темой не осталась незамеченной.",
+                    "Отлично! Твой ответ полностью соответствует задаче.",
+                    "ААААААААбсолютно верно!",
+                    "Молодец, абсолютно правильно!"
+                ]
+
 def get_random_task():
     """
     Получает случайную задачу с сайта.
     """
-    task_id = str(random.randint(64, 93))
-    url = f'https://neofamily.ru/russkiy-yazyk/task-bank/{task_id}'
-    response = requests.get(url, headers=headers, proxies={"SOCKS4": "http://78.109.139.51:5678"})
+    # Костылима
+    excluded_numbers = {82, 94, 95, 96}
+    number = random.randint(64, 124)
+    while number in excluded_numbers:
+        number = random.randint(64, 124)
 
+    task_id = str(number)
+    url = f'https://neofamily.ru/russkiy-yazyk/task-bank/{task_id}'
+    response = requests.get(url, headers=headers)
+    # , proxies={"SOCKS4": "http://78.109.139.51:5678"}
     if response.status_code != 200:
         return Task(task_id, f'Ошибка при загрузке страницы: {response.status_code}', None)
 
@@ -77,11 +103,11 @@ def test_russ():
         user_answer = request.form['answer'].strip()
         task_data = session.get('current_task')
 
-        if task_data and user_answer == task_data['answer']:
-            session['message'] = 'Верно! Так держать!'
+        if task_data and sorted(user_answer) == sorted(task_data['answer']):
+            session['message'] = random.choice(correct_messages)
             session['color'] = 'green'
         else:
-            session['message'] = 'Неверно!'
+            session['message'] = random.choice(wrong_messages)
             session['color'] = 'red'
 
         return redirect(url_for('test_russ'))
@@ -115,4 +141,4 @@ def next_task():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

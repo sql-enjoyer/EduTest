@@ -1,101 +1,109 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduTest</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #F0F0F0;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-    .header {
-      background-color: #004D40;
-      padding: 15px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .header h1 {
-      color: #F0F0F0;
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-      cursor: pointer;
-    }
-    .header h1:hover {
-      color: #BDBDBD;
-    }
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
-    }
-    .nav-links a {
-      display: inline-block;
-      background-color: #00796B;
-      color: #F0F0F0;
-      padding: 10px 15px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 16px;
-      border: 2px solid transparent;
-      transition: border 0.3s ease;
-    }
-    .nav-links a:hover {
-      background-color: #00897B;
-      border: 2px solid #F0F0F0;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      max-width: 800px;
-      width: 90%;
-      margin: 20px auto;
-    }
-    h2 {
-      text-align: center;
-      color: #004D40;
-      margin-top: 0;
-      font-size: 24px;
-      font-weight: 700;
-    }
-    p {
-      text-align: left;
-      font-size: 18px;
-      line-height: 1.8;
-      font-weight: 400;
-    }
-  </style>
-</head>
-<body>
-  <header class="header">
-    <h1 onclick="window.location.href='/'">EduTest</h1>
-    <nav class="nav-links">
-      <a href="/test_russ">Русский язык</a>
-      <a href="#">Физика</a>
-      <a href="#">Информатика</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduTest</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&subset=cyrillic&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Montserrat", sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      .header {
+        background-color: #004d40;
+        padding: 15px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .header h1 {
+        color: #f0f0f0;
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0;
+        cursor: pointer;
+      }
+      .header h1:hover {
+        color: #bdbdbd;
+      }
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+      }
+      .nav-links a {
+        display: inline-block;
+        background-color: #00796b;
+        color: #f0f0f0;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        border: 2px solid transparent;
+        transition: border 0.3s ease;
+      }
+      .nav-links a:hover {
+        background-color: #00897b;
+        border: 2px solid #f0f0f0;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        width: 90%;
+        margin: 20px auto;
+      }
+      h2 {
+        text-align: center;
+        color: #004d40;
+        margin-top: 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      p {
+        text-align: left;
+        font-size: 18px;
+        line-height: 1.8;
+        font-weight: 400;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 onclick="window.location.href='/'">EduTest</h1>
+      <nav class="nav-links">
+        <a href="/test_russ">Русский язык</a>
+        <a href="#">Физика</a>
+        <a href="#">Информатика</a>
+      </nav>
+    </header>
 
-  <div class="container">
-    <h2>Добро пожаловать на EduTest!</h2>
-    <p>
-      В современном мире, где объем информации и скорость ее обновления растут экспоненциально, важно не только эффективно передавать знания, но и оперативно проверять их усвоение.
-      Традиционные методы тестирования и оценки знаний зачастую требуют значительных временных и человеческих ресурсов, что делает их менее гибкими и адаптивными.
-    </p>
-    <p>
-      Задача автоматизации процесса проверки знаний становится все более актуальной, особенно в образовательных учреждениях, корпоративном обучении и онлайн-курсах.
-      EduTest - это система, которая позволит автоматизировать процесс проверки знаний и упростит учебный процесс.
-    </p>
-  </div>
-</body>
+    <div class="container">
+      <h2>Добро пожаловать на EduTest!</h2>
+      <p>
+        В современном мире, где объем информации и скорость ее обновления растут
+        экспоненциально, важно не только эффективно передавать знания, но и
+        оперативно проверять их усвоение. Традиционные методы тестирования и
+        оценки знаний зачастую требуют значительных временных и человеческих
+        ресурсов, что делает их менее гибкими и адаптивными.
+      </p>
+      <p>
+        Задача автоматизации процесса проверки знаний становится все более
+        актуальной, особенно в образовательных учреждениях, корпоративном
+        обучении и онлайн-курсах. EduTest - это система, которая позволит
+        автоматизировать процесс проверки знаний и упростит учебный процесс.
+      </p>
+    </div>
+  </body>
 </html>
