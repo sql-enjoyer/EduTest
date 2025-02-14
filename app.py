@@ -39,6 +39,12 @@ def get_random_task(subject):
             'excluded': set(),
             'min': 4354,
             'max': 4363
+        },
+        'hist': {
+            'base_url': 'https://neofamily.ru/istoriya/task-bank/',
+            'excluded': {3273},
+            'min': 3272,
+            'max': 3279
         }
     }
 
@@ -146,6 +152,10 @@ def test_liter():
 def test_math():
     return handle_test('math', 'test_math.html')
 
+@app.route('/test_hist', methods=['GET', 'POST'])
+def test_hist():
+    return handle_test('hist', 'test_hist.html')
+
 @app.route('/next_task/<subject>')
 def next_task(subject):
     new_task = get_random_task(subject)
@@ -157,4 +167,4 @@ def next_task(subject):
     return redirect(url_for(f'test_{subject}'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
