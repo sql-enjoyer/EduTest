@@ -3,39 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduTest - Главная</title>
+  <title>EduTest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Montserrat', sans-serif;
       background-color: #F0F0F0;
-    }
-    .container {
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 60px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
     .header {
       background-color: #004D40;
-      padding: 20px 0;
-      width: 100%;
+      padding: 15px 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
     }
     .header h1 {
       color: #F0F0F0;
-      font-size: 32px;
+      font-size: 28px;
       font-weight: bold;
       margin: 0;
       cursor: pointer;
-      margin-right: 30px;
     }
     .header h1:hover {
       color: #BDBDBD;
@@ -43,45 +33,46 @@
     .nav-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 30px;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
     }
     .nav-links a {
       display: inline-block;
       background-color: #00796B;
       color: #F0F0F0;
-      padding: 10px 20px;
+      padding: 10px 15px;
       text-decoration: none;
       border-radius: 5px;
-      font-size: 18px;
+      font-size: 16px;
+      border: 2px solid transparent;
+      transition: border 0.3s ease;
     }
     .nav-links a:hover {
       background-color: #00897B;
+      border: 2px solid #F0F0F0;
     }
-    .content-panel {
-      background-color: #BDBDBD;
-      padding: 30px;
-      border-radius: 10px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 90%;
+      margin: 20px auto;
     }
-    .content {
-      background-color: #F0F0F0;
-      padding: 60px;
-      border-radius: 10px;
-      width: 100%;
-    }
-    .content h1 {
+    h2 {
+      text-align: center;
       color: #004D40;
-      font-size: 48px;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-    .content p {
-      color: #333333;
+      margin-top: 0;
       font-size: 24px;
-      line-height: 1.5;
+      font-weight: 700;
+    }
+    p {
+      text-align: left;
+      font-size: 18px;
+      line-height: 1.8;
+      font-weight: 400;
     }
   </style>
 </head>
@@ -89,19 +80,22 @@
   <header class="header">
     <h1 onclick="window.location.href='/'">EduTest</h1>
     <nav class="nav-links">
-      <a href="./test_russ">Русский язык</a>
+      <a href="/test_russ">Русский язык</a>
       <a href="#">Физика</a>
       <a href="#">Информатика</a>
     </nav>
   </header>
+
   <div class="container">
-    <div class="content-panel">
-      <div class="content">
-        <h1>Добро пожаловать на EduTest!</h1>
-        <p>В современном мире, где объем информации и скорость ее обновления растут экспоненциально, важно не только эффективно передавать знания, но и оперативно проверять их усвоение. Традиционные методы тестирования и оценки знаний зачастую требуют значительных временных и человеческих ресурсов, что делает их менее гибкими и адаптивными.</p>
-        <p>Задача автоматизации процесса проверки знаний становится все более актуальной, особенно в образовательных учреждениях, корпоративном обучении и онлайн-курсах. EduTest - это система, которая позволит автоматизировать процесс проверки знаний, организовать хранение данных, сделать удобный интерфейс и продумать алгоритм проверки.</p>
-      </div>
-    </div>
+    <h2>Добро пожаловать на EduTest!</h2>
+    <p>
+      В современном мире, где объем информации и скорость ее обновления растут экспоненциально, важно не только эффективно передавать знания, но и оперативно проверять их усвоение.
+      Традиционные методы тестирования и оценки знаний зачастую требуют значительных временных и человеческих ресурсов, что делает их менее гибкими и адаптивными.
+    </p>
+    <p>
+      Задача автоматизации процесса проверки знаний становится все более актуальной, особенно в образовательных учреждениях, корпоративном обучении и онлайн-курсах.
+      EduTest - это система, которая позволит автоматизировать процесс проверки знаний и упростит учебный процесс.
+    </p>
   </div>
 </body>
 </html>

@@ -18,9 +18,9 @@ if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
     
     blocks = soup.find_all('div', class_='detail-text_detailText__YRcv_ [&_*]:!bg-transparent [&_*]:!text-main')
-    paragraphs = blocks[0].find_all('p')
+    paragraphs = blocks[1].find_all('p')
 
-    print(paragraphs[1])
+    print(paragraphs[1].get_text().split()[1])
 
 else:
     print(f'Ошибка при загрузке страницы: {response.status_code}')

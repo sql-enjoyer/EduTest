@@ -51,9 +51,10 @@ def get_random_task():
         elif element.string:
             task_text += element.string.strip() + " "
 
-    task_answer = 'e'
+    paragraphs = blocks[1].find_all('p')
+    task_answer = paragraphs[1].get_text().split()[1]
 
-    return Task(task_id, task_text.strip(), task_answer)
+    return Task(task_id.strip(), task_text.strip(), task_answer.strip())
 
 
 @app.route('/')
@@ -78,7 +79,7 @@ def test_russ():
             session['message'] = 'Верно! Так держать!'
             session['color'] = 'green'
         else:
-            session['message'] = f'Неверно! Правильный ответ: {task_data["answer"]}'
+            session['message'] = 'Неверно!'
             session['color'] = 'red'
 
         return redirect(url_for('test_russ'))
