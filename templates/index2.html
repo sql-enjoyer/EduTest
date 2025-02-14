@@ -1,0 +1,36 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Проверка знаний по математике</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>EduTest</h1>
+        <h3>Проверь свои знания по математике</h3>
+        
+        {% if task %}
+        <div class="task-card">
+            <h3>Задача №{{ task.id }}</h3>
+            <p>{{ task.text }}</p>
+            <form method="POST">
+                <input type="hidden" name="task_id" value="{{ task.id }}">
+                <input type="text" name="answer" placeholder="Введите ваш ответ" required>
+                <button type="submit">Проверить</button>
+            </form>
+            
+            {% if message %}
+            <div class="message" style="color: {{ color }};">
+                {{ message }}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="footer">
+            <p>Для нового вопроса обновите страницу (F5)</p>
+        </div>
+    </div>
+</body>
+</html>

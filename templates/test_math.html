@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTest - математика</title>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #F0F0F0;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* Отключение горизонтальной прокрутки */
+    }
+    .header {
+      background-color: #004D40;
+      padding: 15px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header h1 {
+      color: #F0F0F0;
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+      cursor: pointer;
+    }
+    .header h1:hover {
+      color: #BDBDBD;
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .nav-links a {
+      display: inline-block;
+      background-color: #00796B;
+      color: #F0F0F0;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+      border: 2px solid transparent;
+      transition: border 0.3s ease;
+    }
+    .nav-links a.active {
+      background-color: #00897B;
+      border: 2px solid #F0F0F0;
+    }
+    .nav-links a:hover:not(.active) {
+      background-color: #00897B;
+      border: 2px solid #F0F0F0;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 90%;
+      margin: 0px auto;
+    }
+    h2 {
+      text-align: center;
+      color: #004D40;
+      font-size: 48px;
+      margin-top: 0px;
+    }
+    h3 {
+      text-align: center;
+      color: #004D40;
+      font-size: 28px;
+      margin-top: 0px;
+    }
+    .problem {
+      margin-bottom: 20px;
+      text-align: center; /* Центрирование текста задачи */
+    }
+    .problem p {
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      width: 100%;
+      max-width: 300px; /* Максимальная ширина поля ввода */
+      padding: 10px;
+      border: 1px solid #BDBDBD;
+      border-radius: 4px;
+      font-size: 16px;
+      margin: 0 auto; /* Центрирование поля ввода */
+      display: block; /* Блочный элемент для центрирования */
+    }
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Центрирование кнопок */
+      gap: 10px; /* Расстояние между кнопками */
+      margin-top: 20px; /* Отступ сверху */
+    }
+    button {
+      background-color: #00796B;
+      color: #F0F0F0;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%; /* Ширина кнопки 100% */
+    }
+    button:hover {
+      background-color: #00897B;
+    }
+    .result {
+      text-align: center;
+      color: #00796B;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    /* Адаптивные стили */
+    @media (min-width: 600px) {
+      .button-container {
+        flex-direction: row; /* Выровнять кнопки в ряд на больших экранах */
+        justify-content: center; /* Центрирование кнопок */
+      }
+      button {
+        width: auto; /* Автоматическая ширина кнопок на больших экранах */
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1 onclick="window.location.href='/'">EduTest</h1>
+    <nav class="nav-links">
+      <a href="#" class="active">Математика</a>
+      <a href="#">Физика</a>
+      <a href="#">Информатика</a>
+    </nav>
+  </header>
+
+  {% if task %}
+  <div class="container">
+    <h2>Тренажер по Математике</h2>
+    <h3>Задача №{{ task.get_id() }}</h3>
+    <div class="problem">
+      <p>{{ task.get_text() }}</p>
+      <form method="POST" action="{{ url_for('test_math') }}">
+        <input type="text" name="answer" placeholder="Введите ваш ответ" required>
+        <div class="button-container">
+          <button type="submit">Проверить</button>
+          <button type="button" onclick="window.open('https://ege.sdamgia.ru/', '_blank')">Теория и Источник</button>
+          <!-- Кнопка для следующей задачи -->
+          <button type="button" onclick="window.location.href='{{ url_for('next_task') }}'">Следующий вопрос</button>
+        </div>
+      </form>
+      {% if message %}
+      <div class="message" style="color: {{ color }};">
+          {{ message }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</body>
+</html>
