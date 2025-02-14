@@ -10,7 +10,9 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24).hex()
 
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept-Language': 'ru-RU,ru;q=0.9',
+    'Referer': 'https://neofamily.ru/'
 }
 
 def get_random_task():
@@ -19,7 +21,7 @@ def get_random_task():
     """
     task_id = str(random.randint(64, 93))
     url = f'https://neofamily.ru/russkiy-yazyk/task-bank/{task_id}'
-    response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    response = requests.get(url, headers=headers, proxies={"SOCKS4": "http://78.109.139.51:5678"})
 
     if response.status_code != 200:
         return Task(task_id, f'Ошибка при загрузке страницы: {response.status_code}', None)
