@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EduTest - русский язык</title>
+    <title>EduTest - литература</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&subset=cyrillic&display=swap"
       rel="stylesheet"
@@ -148,8 +148,7 @@
     <header class="header">
       <h1 onclick="window.location.href='/'">EduTest</h1>
       <nav class="nav-links">
-        <a href="{{ url_for('test_russ') }}" class="active">Русский язык</a>
-        <a href="{{ url_for('test_math') }}">Математика</a>
+        <a href="#">Русский язык</a>
         <a href="#" style="opacity: 0.7; cursor: not-allowed">Литература</a>
         <a href="#" style="opacity: 0.7; cursor: not-allowed">Физика</a>
         <a href="#" style="opacity: 0.7; cursor: not-allowed">Информатика</a>
@@ -158,11 +157,11 @@
 
     {% if task %}
     <div class="container">
-      <h2>Тренажер по Русскому языку</h2>
+      <h2>Тренажер по Литературе</h2>
       <h3>Задача №{{ task.get_id() }}</h3>
       <div class="problem">
         <p>{{ task.get_text() | safe }}</p>
-        <form method="POST" action="{{ url_for('test_russ') }}">
+        <form method="POST" action="{{ url_for('test_liter') }}">
           <input
             type="text"
             name="answer"
@@ -173,13 +172,13 @@
             <button type="submit">Проверить</button>
             <button
               type="button"
-              onclick="window.open('https://neofamily.ru/russkiy-yazyk/task-bank/{{ task.get_id() }}', '_blank')"
+              onclick="window.open('https://neofamily.ru/literatura/task-bank/{{ task.get_id() }}', '_blank')"
             >
               Теория и Источник
             </button>
             <button
               type="button"
-              onclick="window.location.href='{{ url_for('next_task', subject='russ') }}'"
+              onclick="window.location.href='{{ url_for('next_task', subject='liter') }}'"
             >
               Следующий вопрос
             </button>

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from task import Task
-
 import os
 from bs4 import BeautifulSoup
 import requests
@@ -15,123 +14,147 @@ headers = {
     'Referer': 'https://neofamily.ru/'
 }
 
-wrong_messages   = [ "Ответ неверный!",
-                    "Неправильно.",
-                    "Кто не ошибается, тот не развивается!"
-                ]
+wrong_messages = ["Ответ неверный!", "Неправильно.", "Кто не ошибается, тот не развивается!"]
+correct_messages = ["Ответ верный!", "Правильно!", "Точно!", "Верный ответ!", "Отлично!", "Абсолютно верно!"]
 
-correct_messages = [ "Ответ верный!",
-                    "Правильно!",
-                    "Точно! Так держать!",
-                    "Верный ответ!",
-                    "Отлично!",
-                    "Абсолютно верно!"
-                ]
-
-def get_random_task():
+def get_random_task(subject):
     """
-    Получает случайную задачу с сайта.
+    Получает случайную задачу для указанного предмета с сохранением форматирования
     """
-    # Костылима
-    excluded_numbers = {82, 94, 95, 96, 122}
-    number = random.randint(64, 124)
-    while number in excluded_numbers:
-        number = random.randint(64, 124)
+    subject_config = {
+        'russ': {
+            'base_url': 'https://neofamily.ru/russkiy-yazyk/task-bank/',
+            'excluded': {82, 94, 95, 96, 122},
+            'min': 64,
+            'max': 124
+        },
+        'liter': {
+            'base_url': 'https://neofamily.ru/literatura/task-bank/',
+            'excluded': {26, 36, 37, 38},
+            'min': 22,
+            'max': 55
+        },
+        'math': {
+            'base_url': 'https://neofamily.ru/matematika-baza/task-bank/',
+            'excluded': set(),
+            'min': 4354,
+            'max': 4363
+        }
+    }
 
-    task_id = str(number)
-    url = f'https://neofamily.ru/russkiy-yazyk/task-bank/{task_id}'
+    config = subject_config.get(subject)
+    if not config:
+        raise ValueError("Недопустимый предмет")
+
+    while True:
+        number = random.randint(config['min'], config['max'])
+        if number not in config['excluded']:
+            break
+
+    url = f"{config['base_url']}{number}"
     response = requests.get(url, headers=headers)
-    # , proxies={"SOCKS4": "http://78.109.139.51:5678"}
+    
     if response.status_code != 200:
-        return Task(task_id, f'Ошибка при загрузке страницы: {response.status_code}', None)
+        return Task(str(number), f'Ошибка: {response.status_code}', None)
 
     soup = BeautifulSoup(response.text, 'html.parser')
-    blocks = soup.find_all('div', class_='detail-text_detailText__YRcv_ [&_*]:!bg-transparent [&_*]:!text-main')
+    blocks = soup.find_all('div', class_='detail-text_detailText__YRcv_')
 
-    if not blocks:
-        return Task(task_id, 'Не удалось найти условие задачи', None)
+    if not blocks or len(blocks) < 2:
+        return Task(str(number), 'Не удалось найти условие задачи', None)
 
-    # Парсинг условия задачи
-    paragraphs = blocks[0].find_all('p')
-    if len(paragraphs) < 2:
-        return Task(task_id, 'Не удалось найти текст задачи', None)
+    try:
+        condition_block = blocks[0]
+        for element in condition_block.find_all('button'):
+            element.decompose()
+            
+        task_html = []
+        for p in condition_block.find_all('p'):
+            p_html = p.decode_contents().strip()
+            p_html = p_html.replace('\n', '<br>')
+            task_html.append(f'<p>{p_html}</p>')
+            
+        task_text = ''.join(task_html)
+        
+        answer_blocks = blocks[1].find_all('p')
+        if len(answer_blocks) < 2:
+            return Task(str(number), 'Ошибка: Неправильная структура блока ответа', None)
+            
+        answer = answer_blocks[1].get_text().split()
+        if len(answer) < 2:
+            return Task(str(number), 'Ошибка: Не найден ответ', None)
+            
+        answer = answer[1].strip()
 
-    # Первый <p> — условие задачи (без переноса строк)
-    condition = ''
-    for element in paragraphs[0].contents:
-        if element.name == 'strong':
-            condition += f"<strong>{element.string}</strong>"
-        elif element.string:
-            condition += element.string.strip() + " "
+    except Exception as e:
+        return Task(str(number), f'Ошибка парсинга: {str(e)}', None)
 
-    # Второй <p> — текст задачи с сохранением <br>
-    task_text = condition + " <br>"
-    for element in paragraphs[1].contents:
-        if element.name == 'br':
-            task_text += "<br>"
-        elif element.string:
-            task_text += element.string.strip() + " "
+    return Task(str(number), task_text.strip(), answer)
 
-    paragraphs = blocks[1].find_all('p')
-    task_answer = paragraphs[1].get_text().split()[1]
-
-    return Task(task_id.strip(), task_text.strip(), task_answer.strip())
-
-
-@app.route('/')
-def index():
+def handle_test(subject, template):
     """
-    Главная страница.
+    Общая логика обработки тестов.
     """
-    session.clear()
-    return render_template('index.html')
-
-
-@app.route('/test_russ', methods=['GET', 'POST'])
-def test_russ():
-    """
-    Страница с тестом по математике.
-    """
+    session_key = f'current_task_{subject}'
+    
     if request.method == 'POST':
-        user_answer = request.form['answer'].strip()
-        task_data = session.get('current_task')
+        user_answer = request.form['answer'].strip().lower().replace(' ', '')
+        task_data = session.get(session_key)
 
-        if task_data and sorted(user_answer) == sorted(task_data['answer']):
-            session['message'] = random.choice(correct_messages)
-            session['color'] = 'green'
+        if task_data:
+            correct_answer = task_data['answer'].lower().replace(' ', '')
+            if subject == "russ" and sorted(user_answer) == sorted(correct_answer):
+                session['message'] = random.choice(correct_messages)
+                session['color'] = 'green'
+            elif user_answer == correct_answer:
+                session['message'] = random.choice(correct_messages)
+                session['color'] = 'green'
+            else:
+                session['message'] = random.choice(wrong_messages)
+                session['color'] = 'red'
         else:
-            session['message'] = random.choice(wrong_messages)
+            session['message'] = "Ошибка: задача не найдена"
             session['color'] = 'red'
+            
+        return redirect(url_for(f'test_{subject}'))
 
-        return redirect(url_for('test_russ'))
+    if session_key not in session:
+        return redirect(url_for('next_task', subject=subject))
 
-    if 'current_task' not in session:
-        return redirect(url_for('next_task'))
-
-    task_data = session['current_task']
-    task = Task(task_data['id'], task_data['text'], task_data['answer'])
-
+    task_data = session[session_key]
     return render_template(
-        'test_russ.html',
-        task=task,
+        template,
+        task=Task(task_data['id'], task_data['text'], task_data['answer']),
         message=session.pop('message', None),
         color=session.pop('color', None)
     )
 
+@app.route('/')
+def index():
+    session.clear()
+    return render_template('index.html')
 
-@app.route('/next_task')
-def next_task():
-    """
-    Переход к следующей задаче.
-    """
-    new_task = get_random_task()
-    session['current_task'] = {
-        'id': new_task.get_id(),
-        'text': new_task.get_text(),
-        'answer': new_task.get_answer()
+@app.route('/test_russ', methods=['GET', 'POST'])
+def test_russ():
+    return handle_test('russ', 'test_russ.html')
+
+@app.route('/test_liter', methods=['GET', 'POST'])
+def test_liter():
+    return handle_test('liter', 'test_liter.html')
+
+@app.route('/test_math', methods=['GET', 'POST'])
+def test_math():
+    return handle_test('math', 'test_math.html')
+
+@app.route('/next_task/<subject>')
+def next_task(subject):
+    new_task = get_random_task(subject)
+    session[f'current_task_{subject}'] = {
+        'id': new_task.id,
+        'text': new_task.text,
+        'answer': new_task.answer
     }
-    return redirect(url_for('test_russ'))
-
+    return redirect(url_for(f'test_{subject}'))
 
 if __name__ == '__main__':
     app.run(debug=True)
